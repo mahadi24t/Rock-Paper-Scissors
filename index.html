@@ -33,20 +33,17 @@
             margin: 20px 0;
         }
 
-        .choice {
+        button.choice {
             cursor: pointer;
-            padding: 10px;
-            border: 3px dashed #0a2351;
-            border-radius: 50%;
-            width: 80px;
-            height: 80px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            padding: 10px 20px;
+            border: 2px solid #333;
+            border-radius: 5px;
+            font-size: 16px;
             transition: 0.3s;
+            background-color: #fff;
         }
 
-        .choice:hover {
+        button.choice:hover {
             background-color: #ececec;
             transform: scale(1.1);
         }
@@ -61,7 +58,7 @@
             font-size: 16px;
         }
 
-        button {
+        button#resetButton {
             background-color: #4caf50;
             color: white;
             border: none;
@@ -72,27 +69,24 @@
             transition: 0.3s;
         }
 
-        button:hover {
+        button#resetButton:hover {
             background-color: #45a049;
         }
     </style>
-    <script src="index.js"></script>
 </head>
 <body>
-    <br>
-    <h1>Rock 🪨  Paper 📄  Scissors ✂️</h1>
+    <h1>Rock 🪨 Paper 📄 Scissors ✂️</h1>
     <div class="game-container">
         <p><b>Choose Your Move:</b></p>
         <div class="choices">
-            <div class="choice" id="rock"><b>🪨</b></div>
-            <div class="choice" id="paper"><b>📄</b></div>
-            <div class="choice" id="scissors"><b>✂️</b></div>
+            <button class="choice" id="rock">🪨 Rock</button>
+            <button class="choice" id="paper">📄 Paper</button>
+            <button class="choice" id="scissors">✂️ Scissors</button>
         </div>
-        <div class="results" id="results"></div>
+        <div class="results" id="results">Make your move!</div>
         <div class="scoreboard" id="scoreboard">
             <p>Player Score: 0</p>
             <p>Computer Score: 0</p>
-            <p>Rounds Played: 0 / 5</p>
         </div>
         <button id="resetButton">Reset Game</button>
     </div>
@@ -105,8 +99,7 @@
 
         let playerScore = 0;
         let computerScore = 0;
-        let roundsPlayed = 0;
-        const maxRounds = 5;
+        const maxScore = 5;
 
         function getComputerChoice() {
             const options = ['rock', 'paper', 'scissors'];
@@ -114,7 +107,6 @@
         }
 
         function playRound(humanChoice, computerChoice) {
-            humanChoice = humanChoice.toLowerCase();
             if (humanChoice === computerChoice) {
                 return "It's a tie!";
             } else if (
@@ -134,30 +126,26 @@
             scoreboardDiv.innerHTML = `
                 <p>Player Score: ${playerScore}</p>
                 <p>Computer Score: ${computerScore}</p>
-                <p>Rounds Played: ${roundsPlayed} / ${maxRounds}</p>
             `;
         }
 
         function playGame(humanChoice) {
-            if (roundsPlayed >= maxRounds) {
+            if (playerScore >= maxScore || computerScore >= maxScore) {
                 resultsDiv.textContent = "Game over! Press Reset to play again.";
                 return;
             }
 
             const computerChoice = getComputerChoice();
             const result = playRound(humanChoice, computerChoice);
-            roundsPlayed++;
 
             resultsDiv.textContent = result;
             updateScoreboard();
 
-            if (roundsPlayed === maxRounds) {
+            if (playerScore >= maxScore || computerScore >= maxScore) {
                 if (playerScore > computerScore) {
-                    resultsDiv.textContent += " Congratulations! You win the game!";
-                } else if (computerScore > playerScore) {
-                    resultsDiv.textContent += " The computer wins the game! Better luck next time.";
+                    resultsDiv.textContent = "Congratulations! You win the game!";
                 } else {
-                    resultsDiv.textContent += " It's a tie! What a close game!";
+                    resultsDiv.textContent = "The computer wins the game! Better luck next time.";
                 }
             }
         }
@@ -165,11 +153,11 @@
         function resetGame() {
             playerScore = 0;
             computerScore = 0;
-            roundsPlayed = 0;
-            resultsDiv.textContent = '';
+            resultsDiv.textContent = 'Make your move!';
             updateScoreboard();
         }
 
+        // Add event listeners to the choice buttons
         choices.forEach(choice => {
             choice.addEventListener('click', () => {
                 const humanChoice = choice.id;
@@ -177,6 +165,7 @@
             });
         });
 
+        // Add event listener to the reset button
         resetButton.addEventListener('click', resetGame);
 
         // Initialize the scoreboard

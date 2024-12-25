@@ -1,1 +1,1 @@
-alert("Let's Play -> Rock! Paper! Scissors!")
+alert("Let's Play -> Rock! Paper! Scissors!");
